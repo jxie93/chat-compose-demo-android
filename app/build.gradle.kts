@@ -79,6 +79,7 @@ dependencies {
 
     // storage
     implementation(libs.androidx.room.runtime)
+    implementation(libs.kotlinx.serialization.json)
     annotationProcessor(libs.androidx.room.compiler)
     kapt(libs.androidx.room.compiler)
 }
