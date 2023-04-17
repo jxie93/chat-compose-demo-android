@@ -1,6 +1,5 @@
 package com.example.chatdemocompose.domain
 
-import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -9,6 +8,13 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Calendar.DAY_OF_WEEK
+import java.util.Calendar.HOUR_OF_DAY
+import java.util.Calendar.MINUTE
+import java.util.Date
 import java.util.UUID
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -18,24 +24,31 @@ internal class EntityConverters {
     fun fromStringToList(input: String): List<String> = json.decodeFromString(input)
     @TypeConverter
     fun fromList(list: List<String>): String = json.encodeToString(list)
-    @TypeConverter
-    fun fromUri(uri: Uri): String = uri.toString()
 }
 
 @Entity
-internal data class DemoContent(
+internal data class Message(
     @PrimaryKey val id: String,
-    @ColumnInfo("title") val title: String,
-    @ColumnInfo("description") val description: String,
-    @ColumnInfo("isPlaceholder") val isPlaceholder: Boolean
+    @ColumnInfo("text") val text: String,
+    @ColumnInfo("date") val date: Long,
 ) {
+    val dateTime
+        get() = Date(date)
+
+    val dateTimeFormatted: String
+        get() {
+            val calendar = Calendar.getInstance().apply {
+                time = dateTime
+            }
+            return "${calendar.get(DAY_OF_WEEK)} ${calendar.get(HOUR_OF_DAY)}:${calendar.get(MINUTE)}"
+        }
+
     companion object {
         fun getPlaceholders(count: Int) = List(count) {
-            DemoContent(
+            Message(
                 id = UUID.randomUUID().toString(),
-                title = "",
-                description = "",
-                isPlaceholder = true
+                text = "",
+                date = -1,
             )
         }
     }

@@ -27,8 +27,8 @@ internal class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDemoContentDao(
+    fun provideMessagesDao(
         db: AppDatabase
-    ) = db.demoContentDao()
+    ) = db.messagesDao()
 
 }

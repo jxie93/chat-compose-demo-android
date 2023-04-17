@@ -1,7 +1,7 @@
 package com.example.chatdemocompose.hilt
 
-import com.example.chatdemocompose.data.ContentRepo
-import com.example.chatdemocompose.data.ContentRepoImpl
+import com.example.chatdemocompose.data.MessageRepo
+import com.example.chatdemocompose.data.MessageRepoImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,6 +14,6 @@ internal abstract class ServicesModule {
 
     @Binds
     @Singleton
-    abstract fun bindContentRepo(impl: ContentRepoImpl): ContentRepo
+    abstract fun bindContentRepo(impl: MessageRepoImpl): MessageRepo
 
 }
