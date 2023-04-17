@@ -47,11 +47,9 @@ dependencies {
     // core
     implementation(libs.kotlin.stdlib)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.activity.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.extensions)
+    implementation(libs.bundles.androidx.lifecycle)
 
     // compose
     implementation(libs.androidx.compose.ui)
@@ -70,8 +68,7 @@ dependencies {
     testImplementation(libs.kotlin.test)
 
     // coroutines
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.bundles.kotlinx.coroutines)
 
     // hilt
     implementation(libs.hilt.android)

@@ -2,10 +2,10 @@
 compileSdk = "33"
 minSdk = "24"
 targetSdk = "33"
-kotlin = "1.7.0"
+kotlin = "1.8.0"
 androidGradlePlugin = "7.4.2"
 hilt = "2.45"
-compose-compiler = "1.2.0"
+compose-compiler = "1.4.1"
 room = "2.5.0"
 androidx-corektx = "1.9.0"
 compose-ui = "1.2.0"
@@ -20,9 +20,10 @@ mockk = "1.10.0"
 kotlinx-coroutines-test = "1.6.4"
 kotlinx-coroutines = "1.6.1"
 kotlinx-serialization-json = "1.0.0"
+compose-material = "1.4.1"
 
 [libraries]
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
@@ -37,7 +38,7 @@ androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling
 androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose-ui" }
 androidx-compose-ui-tooling= { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
 androidx-compose-ui-test-manifest= { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose-ui" }
-androidx-compose-material = { module = "androidx.compose.material:material" }
+androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "compose-material" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
@@ -51,6 +52,10 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+
+[bundles]
+kotlinx-coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android"]
+androidx-lifecycle = ["androidx-lifecycle-viewmodel-ktx", "androidx-lifecycle-extensions", "androidx-lifecycle-runtime-ktx"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
