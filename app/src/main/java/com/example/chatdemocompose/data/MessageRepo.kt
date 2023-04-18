@@ -3,7 +3,7 @@ package com.example.chatdemocompose.data
 import com.example.chatdemocompose.domain.Message
 import javax.inject.Inject
 
-internal interface MessageRepo {
+interface MessageRepo {
     suspend fun loadLocalMessages(): List<Message>
 
     suspend fun saveLocalMessage(content: Message)
@@ -11,7 +11,7 @@ internal interface MessageRepo {
     suspend fun clearLocalMessages()
 }
 
-internal class MessageRepoImpl @Inject constructor(
+class MessageRepoImpl @Inject constructor(
     private val localDataSource: LocalMessageDataSource
 ): MessageRepo {
 

@@ -21,6 +21,7 @@ kotlinx-coroutines-test = "1.6.4"
 kotlinx-coroutines = "1.6.1"
 kotlinx-serialization-json = "1.0.0"
 compose-material = "1.4.1"
+compose-material3 = "1.0.1"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -39,6 +40,7 @@ androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4
 androidx-compose-ui-tooling= { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
 androidx-compose-ui-test-manifest= { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose-ui" }
 androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "compose-material" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }

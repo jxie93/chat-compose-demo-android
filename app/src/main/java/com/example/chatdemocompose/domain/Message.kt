@@ -8,13 +8,13 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.text.DateFormat
-import java.text.SimpleDateFormat
+import java.text.DateFormatSymbols
 import java.util.Calendar
 import java.util.Calendar.DAY_OF_WEEK
 import java.util.Calendar.HOUR_OF_DAY
 import java.util.Calendar.MINUTE
 import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -27,30 +27,30 @@ internal class EntityConverters {
 }
 
 @Entity
-internal data class Message(
+data class Message(
     @PrimaryKey val id: String,
     @ColumnInfo("text") val text: String,
     @ColumnInfo("date") val date: Long,
+    @ColumnInfo("sender") val sender: String,
 ) {
-    val dateTime
+
+    companion object {
+        const val SENDER_ME = "sender_me"
+    }
+
+    val isReceived
+        get() = sender != SENDER_ME
+
+    private val dateTime
         get() = Date(date)
 
-    val dateTimeFormatted: String
+    val timestamp: String
         get() {
             val calendar = Calendar.getInstance().apply {
                 time = dateTime
             }
-            return "${calendar.get(DAY_OF_WEEK)} ${calendar.get(HOUR_OF_DAY)}:${calendar.get(MINUTE)}"
+            val weekDays = DateFormatSymbols(Locale.ROOT).weekdays
+            return "${weekDays[calendar.get(DAY_OF_WEEK)]} ${calendar.get(HOUR_OF_DAY)}:${calendar.get(MINUTE)}"
         }
-
-    companion object {
-        fun getPlaceholders(count: Int) = List(count) {
-            Message(
-                id = UUID.randomUUID().toString(),
-                text = "",
-                date = -1,
-            )
-        }
-    }
 
 }

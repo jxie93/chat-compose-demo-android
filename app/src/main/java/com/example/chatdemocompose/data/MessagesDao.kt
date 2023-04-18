@@ -8,7 +8,7 @@ import androidx.room.Query
 import com.example.chatdemocompose.domain.Message
 
 @Dao
-internal interface MessagesDao {
+interface MessagesDao {
     @Query("SELECT * FROM message")
     fun getAll(): List<Message>
 

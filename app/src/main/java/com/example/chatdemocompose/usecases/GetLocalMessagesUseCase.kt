@@ -4,7 +4,7 @@ import com.example.chatdemocompose.data.MessageRepo
 import com.example.chatdemocompose.domain.Message
 import javax.inject.Inject
 
-internal class GetLocalMessagesUseCase @Inject constructor(
+class GetLocalMessagesUseCase @Inject constructor(
     private val messageRepo: MessageRepo
 ) {
     suspend operator fun invoke(): List<Message> {

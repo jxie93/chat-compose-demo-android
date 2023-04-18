@@ -4,7 +4,7 @@ import com.example.chatdemocompose.domain.MessageDataSource
 import com.example.chatdemocompose.domain.Message
 import javax.inject.Inject
 
-internal class LocalMessageDataSource @Inject constructor(
+class LocalMessageDataSource @Inject constructor(
     private val dao: MessagesDao
 ): MessageDataSource {
     override suspend fun fetchMessages(): List<Message> {
