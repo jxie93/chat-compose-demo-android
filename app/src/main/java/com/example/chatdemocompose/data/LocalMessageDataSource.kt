@@ -23,6 +23,14 @@ class LocalMessageDataSource @Inject constructor(
         dao.delete(content)
     }
 
+    override suspend fun deleteMessage(id: String) {
+        dao.deleteMessage(id)
+    }
+
+    override suspend fun deleteChannel(channel: String) {
+        dao.deleteChannel(channel)
+    }
+
     fun deleteAll() {
         dao.deleteAll()
     }

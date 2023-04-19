@@ -21,6 +21,12 @@ interface MessagesDao {
     @Delete
     fun delete(content: Message)
 
+    @Query("DELETE FROM message WHERE channel = :channel")
+    fun deleteChannel(channel: String)
+
+    @Query("DELETE FROM message WHERE id = :id")
+    fun deleteMessage(id: String)
+
     @Query("DELETE FROM message")
     fun deleteAll()
 }

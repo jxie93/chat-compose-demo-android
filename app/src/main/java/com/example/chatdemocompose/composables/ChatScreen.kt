@@ -1,5 +1,6 @@
 package com.example.chatdemocompose.composables
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,15 +24,19 @@ import androidx.compose.ui.unit.dp
 import com.example.chatdemocompose.ChatScreenUiState
 import com.example.chatdemocompose.DummyFactory
 import com.example.chatdemocompose.domain.Message
+import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
+import com.example.chatdemocompose.domain.Message.Companion.MIN_TIME_DIFFERENCE_TIMESTAMP_MILLIS
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 @Composable
 fun ChatScreen(
     modifier: Modifier = Modifier,
     uiState: ChatScreenUiState,
+    channel: String,
     onNavIconPressed: () -> Unit = {},
-    onSendMessage: (String) -> Unit
+    onSendMessage: (String) -> Unit = {}
 ) {
     val scrollState = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -39,7 +44,7 @@ fun ChatScreen(
     Scaffold(
         topBar = {
             ChatScreenTopBar(
-                channelName = uiState.currentChannel ?: "",
+                channelName = channel,
                 onNavIconPressed = onNavIconPressed
             )
         },
@@ -99,8 +104,6 @@ fun MessageList(
     messages: List<Message>,
     scrollState: LazyListState,
 ) {
-    val scope = rememberCoroutineScope()
-
     LazyColumn(
         reverseLayout = true,
         state = scrollState,
@@ -111,7 +114,12 @@ fun MessageList(
             val nextMessage = messages.getOrNull(index + 1)
             val currentMessage = messages[index]
 
-            val shouldShowTimestamp = nextMessage?.sender != currentMessage.sender
+            val differentSender = nextMessage?.sender != currentMessage.sender
+            val largeTimeDifference = nextMessage?.let {
+                abs(it.date - currentMessage.date) > MIN_TIME_DIFFERENCE_TIMESTAMP_MILLIS
+            } ?: false
+
+            val shouldShowTimestamp = differentSender || largeTimeDifference
 
             item {
                 MessageItem(
@@ -128,10 +136,10 @@ fun MessageList(
 fun ChatScreenPreview() {
     ChatDemoComposeTheme {
         ChatScreen(
+            channel = CHANNEL_ALICE,
             uiState = ChatScreenUiState(
                 messages = DummyFactory.generateMessages(10)
             ),
-            onSendMessage = {}
         )
     }
 }

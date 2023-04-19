@@ -8,4 +8,8 @@ internal interface MessageDataSource {
 
     suspend fun deleteMessage(content: Message)
 
+    suspend fun deleteMessage(id: String)
+
+    suspend fun deleteChannel(channel: String)
+
 }

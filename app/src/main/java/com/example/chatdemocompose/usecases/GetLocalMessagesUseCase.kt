@@ -7,7 +7,9 @@ import javax.inject.Inject
 class GetLocalMessagesUseCase @Inject constructor(
     private val messageRepo: MessageRepo
 ) {
-    suspend operator fun invoke(): List<Message> {
-        return messageRepo.loadLocalMessages().sortedByDescending { it.date }
+    suspend operator fun invoke(channel: String): List<Message> {
+        return messageRepo.loadLocalMessages()
+            .filter { it.channel == channel }
+            .sortedByDescending { it.date }
     }
 }

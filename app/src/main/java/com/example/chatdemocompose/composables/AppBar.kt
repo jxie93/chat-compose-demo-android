@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.chatdemocompose.R
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
 
 @Composable
@@ -49,7 +50,7 @@ fun AppBarIcon(
     Box(modifier = modifier) {
         Icon(
             modifier = Modifier.fillMaxSize(),
-            painter = painterResource(id = android.R.drawable.ic_menu_more),
+            painter = painterResource(id = R.drawable.ic_menu),
             contentDescription = null,
         )
     }

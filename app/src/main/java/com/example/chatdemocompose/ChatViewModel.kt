@@ -1,5 +1,6 @@
 package com.example.chatdemocompose
 
+import android.util.Log
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,9 +21,6 @@ import javax.inject.Inject
 class ChatScreenUiState(
     messages: List<Message>
 ) {
-
-    val currentChannel
-        get() = messages.firstOrNull()?.channel
 
     companion object {
         val EMPTY = ChatScreenUiState(emptyList())
@@ -48,17 +46,18 @@ class ChatViewModel @Inject constructor(
     private var loadDataJob: Job? = null
     private var sendDataJob: Job? = null
 
-    fun loadLocalData() {
+    fun loadMessages(channel: String) {
         loadDataJob?.cancel()
         loadDataJob = viewModelScope.launch(Dispatchers.IO) {
-            val contentData = getLocalMessagesUseCase.invoke()
+            val contentData = getLocalMessagesUseCase.invoke(channel)
             withContext(Dispatchers.Main) {
+                Log.i("DEBUG", "contentData for $channel -> $contentData")
                 _uiState.emit(ChatScreenUiState(contentData))
             }
         }
     }
 
-    fun sendMessage(messageText: String) {
+    fun sendMessage(messageText: String, channel: String) {
         sendDataJob?.cancel()
         sendDataJob = viewModelScope.launch(Dispatchers.IO) {
             val newMessage = Message(
@@ -66,7 +65,7 @@ class ChatViewModel @Inject constructor(
                 text = messageText,
                 date = System.currentTimeMillis(),
                 sender = SENDER_ME,
-                channel = uiState.value.currentChannel ?: ""
+                channel = channel
             )
             sendMessageUseCase.invoke(newMessage)
             // update ui state immediately with new data

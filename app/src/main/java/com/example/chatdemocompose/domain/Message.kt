@@ -8,14 +8,9 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.text.DateFormatSymbols
-import java.util.Calendar
-import java.util.Calendar.DAY_OF_WEEK
-import java.util.Calendar.HOUR_OF_DAY
-import java.util.Calendar.MINUTE
+import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.UUID
 
 @OptIn(ExperimentalSerializationApi::class)
 internal class EntityConverters {
@@ -37,6 +32,9 @@ data class Message(
 
     companion object {
         const val SENDER_ME = "sender_me"
+        const val MIN_TIME_DIFFERENCE_TIMESTAMP_MILLIS = 30 * 60 * 1000L
+        const val CHANNEL_ALICE = "Alice"
+        const val CHANNEL_BODHI = "Bodhi"
     }
 
     val isReceived
@@ -46,12 +44,6 @@ data class Message(
         get() = Date(date)
 
     val timestamp: String
-        get() {
-            val calendar = Calendar.getInstance().apply {
-                time = dateTime
-            }
-            val weekDays = DateFormatSymbols(Locale.ROOT).weekdays
-            return "${weekDays[calendar.get(DAY_OF_WEEK)]} ${calendar.get(HOUR_OF_DAY)}:${calendar.get(MINUTE)}"
-        }
+        get() = SimpleDateFormat("EEEE HH:mm", Locale.ROOT).format(dateTime)
 
 }

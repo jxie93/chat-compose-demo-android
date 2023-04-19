@@ -41,8 +41,8 @@ import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
 @Composable
 fun MessageInput(
     modifier: Modifier = Modifier,
-    onSendMessage: (String) -> Unit,
-    onResetScroll: () -> Unit
+    onSendMessage: (String) -> Unit = {},
+    onResetScroll: () -> Unit = {}
 ) {
 
     var isKeyboardVisible by remember { mutableStateOf(false) }
@@ -141,7 +141,7 @@ fun MessageTextInput(
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterStart),
-                    text = stringResource(id = R.string.textfield_hint),
+                    text = stringResource(id = R.string.text_field_hint),
                     color = Color.LightGray
                 )
             }
@@ -153,9 +153,6 @@ fun MessageTextInput(
 @Composable
 fun MessageInputPreview() {
     ChatDemoComposeTheme {
-        MessageInput(
-            onSendMessage = {},
-            onResetScroll = {}
-        )
+        MessageInput()
     }
 }

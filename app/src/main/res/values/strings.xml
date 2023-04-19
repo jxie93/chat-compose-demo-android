@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">ChatDemoCompose</string>
-    <string name="textfield_hint">Type a message</string>
+    <string name="app_name">Compose Chat</string>
+    <string name="text_field_hint">Type a message</string>
     <string name="btn_send">Send</string>
+    <string name="header_channels">Channels</string>
+    <string name="header_tools">Tools</string>
 </resources>
