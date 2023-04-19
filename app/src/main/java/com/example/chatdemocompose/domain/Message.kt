@@ -29,6 +29,7 @@ internal class EntityConverters {
 @Entity
 data class Message(
     @PrimaryKey val id: String,
+    @ColumnInfo("channel") val channel: String,
     @ColumnInfo("text") val text: String,
     @ColumnInfo("date") val date: Long,
     @ColumnInfo("sender") val sender: String,

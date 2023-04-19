@@ -1,8 +1,9 @@
-package com.example.chatdemocompose.compose
+package com.example.chatdemocompose.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.chatdemocompose.domain.Message
@@ -56,9 +58,9 @@ private fun MessageItemContent(
 ) {
     val isReceived = content.isReceived
     val backgroundColor = if (isReceived) {
-        androidx.compose.material.MaterialTheme.colors.primary
+        androidx.compose.material.MaterialTheme.colors.primaryVariant
     } else {
-        androidx.compose.material.MaterialTheme.colors.secondary
+        androidx.compose.material.MaterialTheme.colors.secondaryVariant
     }
     val backgroundShape = if (isReceived) {
         RoundedCornerShape(16.dp, 16.dp, 16.dp, 2.dp)
@@ -74,18 +76,21 @@ private fun MessageItemContent(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = if (isReceived) Arrangement.Start else Arrangement.End
     ) {
+        if (!isReceived) Spacer(modifier = Modifier.fillMaxWidth(0.2f).weight(0.2f))
         Surface(
             color = backgroundColor,
             shape = backgroundShape,
             modifier = Modifier
-                .fillMaxWidth(0.8f)
+                .weight(0.8f, false)
                 .then(padding)
         ) {
             Text(
                 modifier = Modifier.padding(8.dp),
-                text = content.text
+                text = content.text,
+                color = Color.White
             )
         }
+        if (isReceived) Spacer(modifier = Modifier.fillMaxWidth(0.2f).weight(0.2f))
     }
 }
 
@@ -98,7 +103,8 @@ fun MessageItemPreview() {
                 id = "id",
                 text = "Message text! Message text! Message text! Message text! Message text! Message text!",
                 date = 1681822006700,
-                sender = SENDER_ME
+                sender = SENDER_ME,
+                channel = "channel"
             ),
             showTimestamp = true
         )
@@ -114,7 +120,8 @@ fun MessageItemPreviewReceived() {
                 id = "id",
                 text = "Message text! Message text! Message text! Message text! Message text! Message text!",
                 date = 1681822006700,
-                sender = "sender"
+                sender = "sender",
+                channel = "channel"
             ),
             showTimestamp = true
         )

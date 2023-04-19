@@ -1,4 +1,4 @@
-package com.example.chatdemocompose.compose
+package com.example.chatdemocompose.composables
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
@@ -16,11 +16,9 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
 import androidx.compose.material.Surface
-import androidx.compose.material3.Button
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,11 +27,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,7 +64,7 @@ fun MessageInput(
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 64.dp)
                 .height(IntrinsicSize.Min)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 8.dp, vertical = 8.dp),
             ) {
 
             // text input
@@ -76,7 +73,8 @@ fun MessageInput(
                     .weight(1f)
                     .fillMaxHeight(),
                 onValueChange = { textState = it },
-                onFocused = onResetScroll
+                onFocused = onResetScroll,
+                textState = textState
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -84,13 +82,18 @@ fun MessageInput(
             // send button
             Button(
                 modifier = Modifier
-                    .widthIn(64.dp)
-                    .fillMaxHeight(),
+                    .align(Alignment.Bottom)
+                    .height(IntrinsicSize.Min)
+                    .widthIn(80.dp)
+                    .clip(RoundedCornerShape(50)),
                 enabled = textState.text.isNotEmpty(),
                 content = {
                   Text(text = stringResource(id = R.string.btn_send))
                 },
-                onClick = { onSendMessage(textState.text) }
+                onClick = {
+                    onSendMessage(textState.text)
+                    textState = TextFieldValue()
+                }
             )
         }
     }
@@ -100,49 +103,46 @@ fun MessageInput(
 fun MessageTextInput(
     modifier: Modifier,
     onValueChange: (TextFieldValue) -> Unit,
-    onFocused: () -> Unit
+    onFocused: () -> Unit,
+    textState: TextFieldValue
 ) {
 
-    var inputText by remember { mutableStateOf(TextFieldValue()) }
+//    var inputText by remember { mutableStateOf(TextFieldValue()) }
 
     Surface(
         modifier = modifier
             .border(
                 width = 1.dp,
-                color = Color.Gray,
-                shape = RoundedCornerShape(percent = 50)
+                color = Color.LightGray,
+                shape = RoundedCornerShape(24.dp)
             ),
     ) {
-        Box {
+        Box(
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
+        ) {
             BasicTextField(
-                value = inputText,
+                value = textState,
                 onValueChange = {
-                    inputText = it
                     onValueChange(it)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp)
                     .align(Alignment.CenterStart)
                     .onFocusChanged { state ->
                         if (state.isFocused) onFocused()
                     },
                 keyboardOptions = KeyboardOptions(
                     keyboardType =  KeyboardType.Text,
-                    imeAction = ImeAction.Send
-                ),
-                maxLines = 1,
-                cursorBrush = SolidColor(LocalContentColor.current),
-                textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current)
+                )
             )
 
             // hint
-            if (inputText.text.isEmpty()) {
+            if (textState.text.isEmpty()) {
                 Text(
                     modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 16.dp),
+                        .align(Alignment.CenterStart),
                     text = stringResource(id = R.string.textfield_hint),
+                    color = Color.LightGray
                 )
             }
         }

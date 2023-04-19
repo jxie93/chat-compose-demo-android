@@ -8,6 +8,6 @@ class GetLocalMessagesUseCase @Inject constructor(
     private val messageRepo: MessageRepo
 ) {
     suspend operator fun invoke(): List<Message> {
-        return messageRepo.loadLocalMessages()
+        return messageRepo.loadLocalMessages().sortedByDescending { it.date }
     }
 }

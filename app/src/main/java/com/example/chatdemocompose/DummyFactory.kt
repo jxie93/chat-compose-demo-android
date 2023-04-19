@@ -14,7 +14,8 @@ class DummyFactory {
                     id = id,
                     text = "Received message id:$id",
                     date = 1681822006700 + (it - count) * -10000,
-                    sender = "dummy"
+                    sender = "dummy",
+                    channel = "Bob"
                 )
             }
         }
@@ -27,7 +28,8 @@ class DummyFactory {
                     id = id,
                     text = "${if (isReceived) "Received message" else "Message"} id:$id",
                     date = 1681822006700 + (it - count) * -10000,
-                    sender = if (isReceived) "dummy" else SENDER_ME
+                    sender = if (isReceived) "dummy" else SENDER_ME,
+                    channel = "Bob"
                 )
             }
         }

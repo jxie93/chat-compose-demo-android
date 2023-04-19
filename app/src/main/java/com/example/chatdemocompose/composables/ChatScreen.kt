@@ -1,6 +1,5 @@
-package com.example.chatdemocompose
+package com.example.chatdemocompose.composables
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,25 +8,20 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.chatdemocompose.compose.MessageInput
-import com.example.chatdemocompose.compose.MessageItem
+import com.example.chatdemocompose.ChatScreenUiState
+import com.example.chatdemocompose.DummyFactory
 import com.example.chatdemocompose.domain.Message
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
 import kotlinx.coroutines.launch
@@ -36,24 +30,19 @@ import kotlinx.coroutines.launch
 fun ChatScreen(
     modifier: Modifier = Modifier,
     uiState: ChatScreenUiState,
-    onNavIconPressed: () -> Unit = { }
+    onNavIconPressed: () -> Unit = {},
+    onSendMessage: (String) -> Unit
 ) {
     val scrollState = rememberLazyListState()
-//    val topBarState = rememberTopAppBarState()
-//    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState)
     val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
             ChatScreenTopBar(
-                channelName = uiState.channelName,
+                channelName = uiState.currentChannel ?: "",
                 onNavIconPressed = onNavIconPressed
             )
         },
-//        modifier = modifier
-//            .nestedScroll(object: NestedScrollConnection{
-//                //TODO?
-//            })
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -63,7 +52,7 @@ fun ChatScreen(
             MessageList(
                 modifier = Modifier
                     .weight(1f)
-                    .background(color = androidx.compose.material.MaterialTheme.colors.background),
+                    .background(color = MaterialTheme.colors.background),
                 messages = uiState.messages,
                 scrollState = scrollState
             )
@@ -71,9 +60,7 @@ fun ChatScreen(
                 modifier = Modifier
                     .navigationBarsPadding()
                     .imePadding(),
-                onSendMessage = {
-                    //TODO
-                },
+                onSendMessage = onSendMessage,
                 onResetScroll = {
                     scope.launch {
                         scrollState.scrollToItem(0)
@@ -142,9 +129,9 @@ fun ChatScreenPreview() {
     ChatDemoComposeTheme {
         ChatScreen(
             uiState = ChatScreenUiState(
-                channelName = "Sarah",
-                initialMessages = DummyFactory.generateMessages(10)
+                messages = DummyFactory.generateMessages(10)
             ),
+            onSendMessage = {}
         )
     }
 }
