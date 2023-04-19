@@ -1,6 +1,5 @@
 package com.example.chatdemocompose.composables
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +33,7 @@ import kotlin.math.abs
 fun ChatScreen(
     modifier: Modifier = Modifier,
     uiState: ChatScreenUiState,
-    channel: String,
+    channel: () -> String,
     onNavIconPressed: () -> Unit = {},
     onSendMessage: (String) -> Unit = {}
 ) {
@@ -44,7 +43,7 @@ fun ChatScreen(
     Scaffold(
         topBar = {
             ChatScreenTopBar(
-                channelName = channel,
+                channelName = channel(),
                 onNavIconPressed = onNavIconPressed
             )
         },
@@ -136,7 +135,7 @@ fun MessageList(
 fun ChatScreenPreview() {
     ChatDemoComposeTheme {
         ChatScreen(
-            channel = CHANNEL_ALICE,
+            channel = { CHANNEL_ALICE },
             uiState = ChatScreenUiState(
                 messages = DummyFactory.generateMessages(10)
             ),

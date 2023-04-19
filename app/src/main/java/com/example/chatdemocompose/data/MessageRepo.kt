@@ -8,7 +8,9 @@ interface MessageRepo {
 
     suspend fun saveLocalMessage(content: Message)
 
-    suspend fun clearLocalMessages()
+    suspend fun clearAllLocalMessages()
+
+    suspend fun clearLocalMessages(channel: String)
 }
 
 class MessageRepoImpl @Inject constructor(
@@ -23,7 +25,11 @@ class MessageRepoImpl @Inject constructor(
         localDataSource.saveMessage(content)
     }
 
-    override suspend fun clearLocalMessages() {
+    override suspend fun clearAllLocalMessages() {
         localDataSource.deleteAll()
+    }
+
+    override suspend fun clearLocalMessages(channel: String) {
+        localDataSource.deleteChannel(channel)
     }
 }

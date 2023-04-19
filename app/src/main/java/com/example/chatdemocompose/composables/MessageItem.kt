@@ -46,7 +46,7 @@ private fun MessageItemTimestamp(
     ) {
         Text(
             text = content.timestamp,
-            color = androidx.compose.material.MaterialTheme.colors.onSurface,
+            color = androidx.compose.material.MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
         )
     }
 }

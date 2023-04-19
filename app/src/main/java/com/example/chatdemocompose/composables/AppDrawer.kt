@@ -44,7 +44,9 @@ fun AppDrawer(
     channels: List<String>,
     selectedChannel: String,
     onChannelSelected: (String) -> Unit = {},
-    content: @Composable () -> Unit = {}
+    onGenerateResponse: (Int) -> Unit = {},
+    onClearChannel: () -> Unit = {},
+    content: @Composable () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
@@ -78,7 +80,10 @@ fun AppDrawer(
                     onChannelSelected = onChannelSelected
                 )
                 Divider(color = Color.LightGray)
-                ToolsList()
+                ToolsList(
+                    onGenerateResponse = onGenerateResponse,
+                    onClearChannel = onClearChannel
+                )
             }
         },
         content = content
@@ -105,10 +110,26 @@ fun ChannelsList(
 
 @Composable
 fun ToolsList(
+    onGenerateResponse: (Int) -> Unit,
+    onClearChannel: () -> Unit
 ) {
     Column {
         DrawerSectionHeader(stringResource(id = R.string.header_tools))
-
+        ToolItem(
+            icon = R.drawable.ic_add_message,
+            title = stringResource(id = R.string.btn_generate_response),
+            onPressed = { onGenerateResponse(1) }
+        )
+        ToolItem(
+            icon = R.drawable.ic_add_message,
+            title = stringResource(id = R.string.btn_generate_response_x3),
+            onPressed = { onGenerateResponse(3) }
+        )
+        ToolItem(
+            icon = R.drawable.ic_delete,
+            title = stringResource(id = R.string.btn_clear_channel),
+            onPressed = onClearChannel
+        )
     }
 }
 
@@ -147,6 +168,33 @@ fun DrawerSectionHeader(
             text = title,
             style = MaterialTheme.typography.button,
             color = Color.Gray
+        )
+    }
+}
+
+@Composable
+fun ToolItem(
+    icon: Int,
+    title: String,
+    onPressed: () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onPressed() }
+            .padding(24.dp, 16.dp, 16.dp, 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(id = icon),
+            tint = MaterialTheme.colors.primary,
+            contentDescription = null,
+        )
+        Text(
+            modifier = Modifier.padding(start = 8.dp),
+            text = title,
+            color = MaterialTheme.colors.onSurface,
+            style = MaterialTheme.typography.button.copy(fontSize = 16.sp),
         )
     }
 }
@@ -198,7 +246,22 @@ fun AppDrawerPreview() {
                 CHANNEL_ALICE,
                 CHANNEL_BODHI
             ),
-            selectedChannel = "Alice",
+            selectedChannel = CHANNEL_ALICE,
+            drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+        )
+    }
+}
+
+@Preview
+@Composable
+fun AppDrawerPreviewDark() {
+    ChatDemoComposeTheme(darkTheme = true) {
+        AppDrawer(
+            channels = listOf(
+                CHANNEL_ALICE,
+                CHANNEL_BODHI
+            ),
+            selectedChannel = CHANNEL_ALICE,
             drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
         )
     }

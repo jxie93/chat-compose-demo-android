@@ -17,7 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
+import com.example.chatdemocompose.composables.AppAlert
 import com.example.chatdemocompose.composables.AppDrawer
 import com.example.chatdemocompose.composables.ChatScreen
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
@@ -63,6 +65,23 @@ fun App(
     val uiState by viewModel.uiState.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     var currentChannel by remember { mutableStateOf(initialChannel) }
+    var showClearChannelAlert by remember { mutableStateOf(false) }
+
+    if (showClearChannelAlert) {
+        AppAlert(
+            text = stringResource(id = R.string.alert_clear_channel, currentChannel),
+            onConfirm = {
+                showClearChannelAlert = false
+                viewModel.deleteMessages(currentChannel)
+                scope.launch {
+                    drawerState.close()
+                }
+            },
+            onDismiss = {
+                showClearChannelAlert = false
+            }
+        )
+    }
 
     AppDrawer(
         drawerState = drawerState,
@@ -72,10 +91,13 @@ fun App(
                 color = MaterialTheme.colors.background
             ) {
                 ChatScreen(
-                    channel = currentChannel,
+                    channel = { currentChannel },
                     uiState = uiState,
                     onSendMessage = { msg ->
-                        viewModel.sendMessage(msg, currentChannel)
+                        viewModel.sendMessage(
+                            messageText = msg,
+                            channel = currentChannel
+                        )
                     },
                     onNavIconPressed = {
                         scope.launch {
@@ -96,6 +118,12 @@ fun App(
         channels = listOf(
             CHANNEL_ALICE,
             CHANNEL_BODHI
-        )
+        ),
+        onGenerateResponse = {
+            viewModel.generateMessages(currentChannel, it)
+        },
+        onClearChannel = {
+            showClearChannelAlert = true
+        }
     )
 }

@@ -4,4 +4,10 @@
     <string name="btn_send">Send</string>
     <string name="header_channels">Channels</string>
     <string name="header_tools">Tools</string>
+    <string name="btn_generate_response">Generate Response</string>
+    <string name="btn_generate_response_x3">Generate Responses (x3)</string>
+    <string name="btn_clear_channel">Clear Channel</string>
+    <string name="btn_ok">Ok</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="alert_clear_channel">This will remove all messages from the channel <b>%1$s</b>. Are you sure?</string>
 </resources>
