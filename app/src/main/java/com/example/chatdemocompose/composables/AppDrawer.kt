@@ -1,5 +1,6 @@
 package com.example.chatdemocompose.composables
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -21,9 +22,11 @@ import androidx.compose.material.ModalDrawer
 import androidx.compose.material.Text
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +36,7 @@ import com.example.chatdemocompose.R
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_BODHI
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun AppDrawer(
@@ -42,6 +46,21 @@ fun AppDrawer(
     onChannelSelected: (String) -> Unit = {},
     content: @Composable () -> Unit = {}
 ) {
+    val scope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
+
+    if (drawerState.isAnimationRunning) {
+        focusManager.clearFocus() // force close keyboard
+    }
+
+    if (drawerState.isOpen) {
+        BackHandler(onBack = {
+            scope.launch {
+                drawerState.close()
+            }
+        })
+    }
+
     ModalDrawer(
         drawerState = drawerState,
         drawerContent = {
