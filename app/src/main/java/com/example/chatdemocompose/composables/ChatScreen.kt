@@ -120,7 +120,9 @@ fun MessageList(
 
             val shouldShowTimestamp = differentSender || largeTimeDifference
 
-            item {
+            item(
+                key = currentMessage.id
+            ) {
                 MessageItem(
                     content = currentMessage,
                     showTimestamp = shouldShowTimestamp
