@@ -49,8 +49,8 @@ class ChatViewModel @Inject constructor(
     private var deleteDataJob: Job? = null
 
     fun deleteMessages(channel: String) {
-        loadDataJob?.cancel()
-        loadDataJob = viewModelScope.launch(Dispatchers.IO) {
+        deleteDataJob?.cancel()
+        deleteDataJob = viewModelScope.launch(Dispatchers.IO) {
             removeLocalMessagesUseCase.invoke(channel)
             withContext(Dispatchers.Main) {
                 _uiState.emit(ChatScreenUiState(emptyList()))

@@ -8,7 +8,7 @@ import kotlin.random.Random
 
 class DummyFactory {
     companion object {
-        val chatbotMessages = listOf(
+        private val chatbotMessages = listOf(
             "Hi there! I'm a chatbot. How can I assist you today?",
             "I'm sorry, I didn't understand that. Could you please rephrase your question?",
             "Did you know I'm not human? I'm just a computer program!",
@@ -70,7 +70,7 @@ class DummyFactory {
                 val isReceived = Random.nextBoolean()
                 Message(
                     id = id,
-                    text = "${if (isReceived) chatbotMessages.random() else "My message id:$id" }",
+                    text = if (isReceived) chatbotMessages.random() else "My message id:$id",
                     date = 1681822006700 + (it - count) * -10000,
                     sender = if (isReceived) channel else SENDER_ME,
                     channel = channel

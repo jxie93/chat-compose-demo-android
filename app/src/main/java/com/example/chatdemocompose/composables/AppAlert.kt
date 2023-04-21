@@ -1,17 +1,13 @@
 package com.example.chatdemocompose.composables
 
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.DrawerValue
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.chatdemocompose.R
-import com.example.chatdemocompose.domain.Message
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
 
 @Composable
