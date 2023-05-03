@@ -7,6 +7,7 @@ import com.example.chatdemocompose.domain.Message
 import com.example.chatdemocompose.usecases.GetLocalMessagesUseCase
 import com.example.chatdemocompose.usecases.RemoveLocalMessagesUseCase
 import com.example.chatdemocompose.usecases.SendMessageUseCase
+import com.example.shared.DummyFactory
 import com.example.shared.domain.Message.Companion.SENDER_ME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -68,8 +69,8 @@ class ChatViewModel @Inject constructor(
                     channel = channel,
                     date = System.currentTimeMillis()
                 )
-                sendMessageUseCase.invoke(msg)
-                newUiState.addMessage(msg)
+                sendMessageUseCase.invoke(Message(msg))
+                newUiState.addMessage(Message(msg))
             }
             withContext(Dispatchers.Main) {
                 _uiState.emit(newUiState)

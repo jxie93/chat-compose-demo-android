@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
+import com.example.shared.domain.Message
 import com.example.shared.domain.Message.Companion.SENDER_ME
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
@@ -30,6 +31,22 @@ data class Message(
     @ColumnInfo("date") val date: Long,
     @ColumnInfo("sender") val sender: String,
 ) {
+
+    fun mapToShared() = Message(
+        id = id,
+        channel = channel,
+        text = text,
+        date = date,
+        sender = sender
+    )
+
+    constructor(shared: Message): this(
+        id = shared.id,
+        channel = shared.channel,
+        text = shared.text,
+        date = shared.date,
+        sender = shared.sender
+    )
 
     val isReceived
         get() = sender != SENDER_ME

@@ -21,13 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.chatdemocompose.ChatScreenUiState
-import com.example.chatdemocompose.DummyFactory
+import com.example.shared.DummyFactory
 import com.example.chatdemocompose.delegates.ChatScreenDelegate
 import com.example.chatdemocompose.domain.Message
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
-import com.example.chatdemocompose.usecases.MessageShowTimestampUseCase
+import com.example.shared.usecases.MessageShowTimestampUseCase
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
 @Composable
 fun ChatScreen(
@@ -114,9 +113,9 @@ fun MessageList(
             val currentMessage = messages[index]
 
             val shouldShowTimestamp = MessageShowTimestampUseCase().invoke(
-                prevMessage = prevMessage,
-                currentMessage = currentMessage,
-                nextMessage = nextMessage
+                prevMessage = prevMessage?.mapToShared(),
+                currentMessage = currentMessage.mapToShared(),
+                nextMessage = nextMessage?.mapToShared()
             )
 
             item(
@@ -124,7 +123,8 @@ fun MessageList(
             ) {
                 MessageItem(
                     content = currentMessage,
-                    showTimestamp = shouldShowTimestamp
+                    showTimestamp = shouldShowTimestamp,
+                    isLastInBlock = true //TODO
                 )
             }
         }
@@ -137,7 +137,7 @@ fun ChatScreenPreview() {
     ChatDemoComposeTheme(darkTheme = false) {
         ChatScreen(
             uiState = ChatScreenUiState(
-                messages = DummyFactory.generateMessages(10)
+                messages = DummyFactory.generateMessages(10).map { Message(it) }
             )
         )
     }
@@ -149,7 +149,7 @@ fun ChatScreenPreviewDark() {
     ChatDemoComposeTheme(darkTheme = true) {
         ChatScreen(
             uiState = ChatScreenUiState(
-                messages = DummyFactory.generateMessages(10)
+                messages = DummyFactory.generateMessages(10).map { Message(it) }
             )
         )
     }

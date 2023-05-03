@@ -1,13 +1,10 @@
-package com.example.chatdemocompose.usecases
+package com.example.shared.usecases
 
-import com.example.chatdemocompose.domain.Message
+import com.example.shared.domain.Message
 import com.example.shared.domain.Message.Companion.MIN_TIME_DIFFERENCE_TIMESTAMP_MILLIS
-import javax.inject.Inject
 import kotlin.math.abs
 
-class MessageShowTimestampUseCase @Inject constructor(
-
-) {
+class MessageShowTimestampUseCase() {
     operator fun invoke(
         prevMessage: Message?,
         currentMessage: Message,

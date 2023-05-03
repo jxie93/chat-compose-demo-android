@@ -1,9 +1,8 @@
-package com.example.chatdemocompose
+package com.example.shared
 
-import com.example.chatdemocompose.domain.Message
+import com.example.shared.domain.Message
 import com.example.shared.domain.Message.Companion.CHANNEL_ALICE
 import com.example.shared.domain.Message.Companion.SENDER_ME
-import java.util.UUID
 import kotlin.random.Random
 
 class DummyFactory {
@@ -53,7 +52,7 @@ class DummyFactory {
 
         fun generateReceivedMessages(count: Int, channel: String = CHANNEL_ALICE): List<Message> {
             return List(count) {
-                val id = UUID.randomUUID().toString()
+                val id = randomUUID()
                 Message(
                     id = id,
                     text = chatbotMessages.random(),
@@ -66,7 +65,7 @@ class DummyFactory {
 
         fun generateMessages(count: Int, channel: String = CHANNEL_ALICE): List<Message> {
             return List(count) {
-                val id = UUID.randomUUID().toString()
+                val id = randomUUID()
                 val isReceived = Random.nextBoolean()
                 Message(
                     id = id,
