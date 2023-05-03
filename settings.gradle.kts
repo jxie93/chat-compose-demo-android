@@ -25,3 +25,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ChatDemoCompose"
 include(":app")
+include(":shared")
