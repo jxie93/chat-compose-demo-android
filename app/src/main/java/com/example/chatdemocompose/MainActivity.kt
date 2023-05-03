@@ -22,6 +22,7 @@ import androidx.core.view.WindowCompat
 import com.example.chatdemocompose.composables.AppAlert
 import com.example.chatdemocompose.composables.AppDrawer
 import com.example.chatdemocompose.composables.ChatScreen
+import com.example.chatdemocompose.delegates.AppDrawerDelegate
 import com.example.chatdemocompose.delegates.ChatScreenDelegate
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_BODHI
@@ -94,7 +95,8 @@ fun App(
                 ChatScreen(
                     uiState = uiState,
                     delegate = object: ChatScreenDelegate {
-                        override fun getChannel() = currentChannel
+                        override val channel: String
+                            get() = currentChannel
                         override fun onNavIconPressed() {
                             scope.launch {
                                 drawerState.open()
@@ -110,23 +112,30 @@ fun App(
                 )
             }
         },
-        selectedChannel = currentChannel,
-        onChannelSelected = {
-            scope.launch {
-                drawerState.close()
+        delegate = object: AppDrawerDelegate {
+            override val selectedChannel: String
+                get() = currentChannel
+            override val channels: List<String>
+                get() = listOf(
+                    CHANNEL_ALICE,
+                    CHANNEL_BODHI
+                )
+
+            override fun onChannelSelected(channelId: String) {
+                scope.launch {
+                    drawerState.close()
+                }
+                currentChannel = channelId
+                viewModel.loadMessages(channelId)
             }
-            currentChannel = it
-            viewModel.loadMessages(it)
+
+            override fun onGenerateResponse(count: Int) {
+                viewModel.generateMessages(currentChannel, count)
+            }
+
+            override fun onClearChannel() {
+                showClearChannelAlert = true
+            }
         },
-        channels = listOf(
-            CHANNEL_ALICE,
-            CHANNEL_BODHI
-        ),
-        onGenerateResponse = {
-            viewModel.generateMessages(currentChannel, it)
-        },
-        onClearChannel = {
-            showClearChannelAlert = true
-        }
     )
 }

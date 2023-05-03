@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatdemocompose.R
+import com.example.chatdemocompose.delegates.AppDrawerDelegate
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_BODHI
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
@@ -41,11 +42,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AppDrawer(
     drawerState: DrawerState,
-    channels: List<String>,
-    selectedChannel: String,
-    onChannelSelected: (String) -> Unit = {},
-    onGenerateResponse: (Int) -> Unit = {},
-    onClearChannel: () -> Unit = {},
+    delegate: AppDrawerDelegate? = null,
     content: @Composable () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
@@ -75,14 +72,14 @@ fun AppDrawer(
                 DrawerTopHeader()
                 Divider(color = Color.LightGray)
                 ChannelsList(
-                    channels = channels,
-                    selectedChannel = selectedChannel,
-                    onChannelSelected = onChannelSelected
+                    channels = delegate?.channels ?: emptyList(),
+                    selectedChannel = delegate?.selectedChannel ?: "",
+                    onChannelSelected = { delegate?.onChannelSelected(it) }
                 )
                 Divider(color = Color.LightGray)
                 ToolsList(
-                    onGenerateResponse = onGenerateResponse,
-                    onClearChannel = onClearChannel
+                    onGenerateResponse = { delegate?.onGenerateResponse(it) },
+                    onClearChannel = { delegate?.onClearChannel() }
                 )
             }
         },
@@ -242,12 +239,8 @@ fun ChannelItem(
 fun AppDrawerPreview() {
     ChatDemoComposeTheme(darkTheme = false) {
         AppDrawer(
-            channels = listOf(
-                CHANNEL_ALICE,
-                CHANNEL_BODHI
-            ),
-            selectedChannel = CHANNEL_ALICE,
-            drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+            drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
+            delegate = AppDrawerDelegate.previewDelegate
         )
     }
 }
@@ -257,12 +250,8 @@ fun AppDrawerPreview() {
 fun AppDrawerPreviewDark() {
     ChatDemoComposeTheme(darkTheme = true) {
         AppDrawer(
-            channels = listOf(
-                CHANNEL_ALICE,
-                CHANNEL_BODHI
-            ),
-            selectedChannel = CHANNEL_ALICE,
-            drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+            drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
+            delegate = AppDrawerDelegate.previewDelegate
         )
     }
 }

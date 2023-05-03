@@ -35,7 +35,7 @@ import kotlin.math.abs
 fun ChatScreen(
     modifier: Modifier = Modifier,
     uiState: ChatScreenUiState,
-    delegate: ChatScreenDelegate
+    delegate: ChatScreenDelegate? = null
 ) {
     val scrollState = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -43,8 +43,8 @@ fun ChatScreen(
     Scaffold(
         topBar = {
             ChatScreenTopBar(
-                channelName = delegate.getChannel(),
-                onNavIconPressed = { delegate.onNavIconPressed() }
+                channelName = delegate?.channel ?: "",
+                onNavIconPressed = { delegate?.onNavIconPressed() }
             )
         },
     ) { paddingValues ->
@@ -64,7 +64,7 @@ fun ChatScreen(
                 modifier = Modifier
                     .navigationBarsPadding()
                     .imePadding(),
-                onSendMessage = { delegate.onSendMessage(it) },
+                onSendMessage = { delegate?.onSendMessage(it) },
                 onResetScroll = {
                     scope.launch {
                         scrollState.scrollToItem(0)
@@ -140,12 +140,7 @@ fun ChatScreenPreview() {
         ChatScreen(
             uiState = ChatScreenUiState(
                 messages = DummyFactory.generateMessages(10)
-            ),
-            delegate = object: ChatScreenDelegate {
-                override fun getChannel() = CHANNEL_ALICE
-                override fun onNavIconPressed() = Unit
-                override fun onSendMessage(messageText: String) = Unit
-            }
+            )
         )
     }
 }

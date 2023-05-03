@@ -1,7 +1,7 @@
 package com.example.chatdemocompose.delegates
 
 interface ChatScreenDelegate {
-    fun getChannel(): String
+    val channel: String
     fun onNavIconPressed()
     fun onSendMessage(messageText: String)
 }
