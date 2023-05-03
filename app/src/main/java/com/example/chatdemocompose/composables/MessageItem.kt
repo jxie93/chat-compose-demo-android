@@ -73,7 +73,7 @@ private fun MessageItemContent(
         RoundedCornerShape(16.dp, 16.dp, 2.dp, 16.dp)
     }
     val padding = if (showTimestamp) {
-        Modifier.padding(8.dp, 8.dp, 8.dp, 8.dp)
+        Modifier.padding(8.dp, 8.dp, 8.dp, 2.dp)
     } else {
         Modifier.padding(8.dp, 2.dp, 8.dp, 2.dp)
     }
