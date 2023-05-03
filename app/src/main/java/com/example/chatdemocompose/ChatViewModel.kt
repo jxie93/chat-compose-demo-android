@@ -4,10 +4,10 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatdemocompose.domain.Message
-import com.example.chatdemocompose.domain.Message.Companion.SENDER_ME
 import com.example.chatdemocompose.usecases.GetLocalMessagesUseCase
 import com.example.chatdemocompose.usecases.RemoveLocalMessagesUseCase
 import com.example.chatdemocompose.usecases.SendMessageUseCase
+import com.example.shared.domain.Message.Companion.SENDER_ME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

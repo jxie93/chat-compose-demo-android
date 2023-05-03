@@ -34,8 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatdemocompose.R
 import com.example.chatdemocompose.delegates.AppDrawerDelegate
-import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
-import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_BODHI
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
 import kotlinx.coroutines.launch
 

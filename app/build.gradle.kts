@@ -44,6 +44,9 @@ android {
 
 dependencies {
 
+    //shared
+    implementation(project(mapOf("path" to ":shared")))
+
     // core
     implementation(libs.kotlin.stdlib)
     implementation(libs.androidx.core.ktx)

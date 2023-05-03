@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
+import com.example.shared.domain.Message.Companion.SENDER_ME
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -29,13 +30,6 @@ data class Message(
     @ColumnInfo("date") val date: Long,
     @ColumnInfo("sender") val sender: String,
 ) {
-
-    companion object {
-        const val SENDER_ME = "sender_me"
-        const val MIN_TIME_DIFFERENCE_TIMESTAMP_MILLIS = 30 * 60 * 1000L
-        const val CHANNEL_ALICE = "Alice"
-        const val CHANNEL_BODHI = "Bodhi"
-    }
 
     val isReceived
         get() = sender != SENDER_ME

@@ -1,8 +1,8 @@
 package com.example.chatdemocompose
 
 import com.example.chatdemocompose.domain.Message
-import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
-import com.example.chatdemocompose.domain.Message.Companion.SENDER_ME
+import com.example.shared.domain.Message.Companion.CHANNEL_ALICE
+import com.example.shared.domain.Message.Companion.SENDER_ME
 import java.util.UUID
 import kotlin.random.Random
 

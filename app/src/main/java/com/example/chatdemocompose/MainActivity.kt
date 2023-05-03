@@ -25,9 +25,9 @@ import com.example.chatdemocompose.composables.AppDrawer
 import com.example.chatdemocompose.composables.ChatScreen
 import com.example.chatdemocompose.delegates.AppDrawerDelegate
 import com.example.chatdemocompose.delegates.ChatScreenDelegate
-import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
-import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_BODHI
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
+import com.example.shared.domain.Message.Companion.CHANNEL_ALICE
+import com.example.shared.domain.Message.Companion.CHANNEL_BODHI
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

@@ -1,6 +1,7 @@
 package com.example.chatdemocompose.delegates
 
-import com.example.chatdemocompose.domain.Message
+import com.example.shared.domain.Message.Companion.CHANNEL_ALICE
+import com.example.shared.domain.Message.Companion.CHANNEL_BODHI
 
 interface AppDrawerDelegate {
     val selectedChannel: String
@@ -12,11 +13,11 @@ interface AppDrawerDelegate {
     companion object {
         val previewDelegate = object: AppDrawerDelegate {
             override val selectedChannel: String
-                get() = Message.CHANNEL_ALICE
+                get() = CHANNEL_ALICE
             override val channels: List<String>
                 get() = listOf(
-                    Message.CHANNEL_ALICE,
-                    Message.CHANNEL_BODHI
+                    CHANNEL_ALICE,
+                    CHANNEL_BODHI
                 )
             override fun onChannelSelected(channelId: String) = Unit
             override fun onGenerateResponse(count: Int) = Unit

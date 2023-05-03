@@ -1,6 +1,6 @@
 package com.example.chatdemocompose.delegates
 
-import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
+import com.example.shared.domain.Message.Companion.CHANNEL_ALICE
 
 interface ChatScreenDelegate {
     val channel: String

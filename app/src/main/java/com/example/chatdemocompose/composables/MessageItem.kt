@@ -16,8 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.chatdemocompose.domain.Message
-import com.example.chatdemocompose.domain.Message.Companion.SENDER_ME
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
+import com.example.shared.domain.Message.Companion.SENDER_ME
 
 @Composable
 fun MessageItem(

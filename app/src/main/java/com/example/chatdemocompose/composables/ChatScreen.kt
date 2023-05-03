@@ -24,8 +24,6 @@ import com.example.chatdemocompose.ChatScreenUiState
 import com.example.chatdemocompose.DummyFactory
 import com.example.chatdemocompose.delegates.ChatScreenDelegate
 import com.example.chatdemocompose.domain.Message
-import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
-import com.example.chatdemocompose.domain.Message.Companion.MIN_TIME_DIFFERENCE_TIMESTAMP_MILLIS
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
 import com.example.chatdemocompose.usecases.MessageShowTimestampUseCase
 import kotlinx.coroutines.launch
