@@ -4,7 +4,7 @@ import com.example.shared.domain.Message
 import com.example.shared.domain.Message.Companion.MIN_TIME_DIFFERENCE_TIMESTAMP_MILLIS
 import kotlin.math.abs
 
-class MessageShowTimestampUseCase() {
+class MessageShowTimestampUseCase {
     operator fun invoke(
         prevMessage: Message?,
         currentMessage: Message,

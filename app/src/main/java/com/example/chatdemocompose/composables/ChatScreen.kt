@@ -25,6 +25,7 @@ import com.example.shared.DummyFactory
 import com.example.chatdemocompose.delegates.ChatScreenDelegate
 import com.example.chatdemocompose.domain.Message
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
+import com.example.shared.usecases.MessageLastInBlockUseCase
 import com.example.shared.usecases.MessageShowTimestampUseCase
 import kotlinx.coroutines.launch
 
@@ -108,11 +109,21 @@ fun MessageList(
             .then(modifier)
     ) {
         for (index in messages.indices) {
+            val prevMessage2 = messages.getOrNull(index - 2)
             val prevMessage = messages.getOrNull(index - 1)
             val nextMessage = messages.getOrNull(index + 1)
             val currentMessage = messages[index]
 
             val shouldShowTimestamp = MessageShowTimestampUseCase().invoke(
+                prevMessage = prevMessage?.mapToShared(),
+                currentMessage = currentMessage.mapToShared(),
+                nextMessage = nextMessage?.mapToShared()
+            )
+
+            val isLastInBlock = MessageLastInBlockUseCase(
+                MessageShowTimestampUseCase()
+            ).invoke(
+                prevMessage2 = prevMessage2?.mapToShared(),
                 prevMessage = prevMessage?.mapToShared(),
                 currentMessage = currentMessage.mapToShared(),
                 nextMessage = nextMessage?.mapToShared()
@@ -124,7 +135,7 @@ fun MessageList(
                 MessageItem(
                     content = currentMessage,
                     showTimestamp = shouldShowTimestamp,
-                    isLastInBlock = true //TODO
+                    isLastInBlock = isLastInBlock
                 )
             }
         }
