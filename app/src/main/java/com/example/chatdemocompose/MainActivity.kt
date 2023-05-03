@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.DrawerState
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -28,6 +29,7 @@ import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_BODHI
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -57,11 +59,69 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+private fun provideChatScreenDelegate(
+    currentChannel: String,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+    viewModel: ChatViewModel
+): ChatScreenDelegate {
+    return object: ChatScreenDelegate {
+        override val channel: String
+            get() = currentChannel
+        override fun onNavIconPressed() {
+            scope.launch {
+                drawerState.open()
+            }
+        }
+        override fun onSendMessage(messageText: String) {
+            viewModel.sendMessage(
+                messageText = messageText,
+                channel = currentChannel
+            )
+        }
+    }
+}
+
+private fun provideAppDrawerDelegate(
+    currentChannel: String,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+    viewModel: ChatViewModel,
+    onCurrentChannelUpdate: (String) -> Unit,
+    onClearChannel: () -> Unit
+): AppDrawerDelegate {
+    return object: AppDrawerDelegate {
+        override val selectedChannel: String
+            get() = currentChannel
+        override val channels: List<String>
+            get() = listOf(
+                CHANNEL_ALICE,
+                CHANNEL_BODHI
+            )
+
+        override fun onChannelSelected(channelId: String) {
+            scope.launch {
+                drawerState.close()
+            }
+            onCurrentChannelUpdate(channelId)
+            viewModel.loadMessages(channelId)
+        }
+
+        override fun onGenerateResponse(count: Int) {
+            viewModel.generateMessages(currentChannel, count)
+        }
+
+        override fun onClearChannel() {
+            onClearChannel()
+        }
+    }
+}
+
 @Composable
 fun App(
     modifier: Modifier = Modifier,
     viewModel: ChatViewModel,
-    initialChannel: String
+    initialChannel: String,
 ) {
     val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
@@ -94,48 +154,22 @@ fun App(
             ) {
                 ChatScreen(
                     uiState = uiState,
-                    delegate = object: ChatScreenDelegate {
-                        override val channel: String
-                            get() = currentChannel
-                        override fun onNavIconPressed() {
-                            scope.launch {
-                                drawerState.open()
-                            }
-                        }
-                        override fun onSendMessage(messageText: String) {
-                            viewModel.sendMessage(
-                                messageText = messageText,
-                                channel = currentChannel
-                            )
-                        }
-                    }
+                    delegate = provideChatScreenDelegate(
+                        currentChannel = currentChannel,
+                        scope = scope,
+                        drawerState = drawerState,
+                        viewModel = viewModel
+                    )
                 )
             }
         },
-        delegate = object: AppDrawerDelegate {
-            override val selectedChannel: String
-                get() = currentChannel
-            override val channels: List<String>
-                get() = listOf(
-                    CHANNEL_ALICE,
-                    CHANNEL_BODHI
-                )
-
-            override fun onChannelSelected(channelId: String) {
-                scope.launch {
-                    drawerState.close()
-                }
-                currentChannel = channelId
-                viewModel.loadMessages(channelId)
-            }
-
-            override fun onGenerateResponse(count: Int) {
-                viewModel.generateMessages(currentChannel, count)
-            }
-
-            override fun onClearChannel() {
-                showClearChannelAlert = true
-            }
-        },
+        delegate = provideAppDrawerDelegate(
+            currentChannel = currentChannel,
+            scope = scope,
+            drawerState = drawerState,
+            viewModel = viewModel,
+            onCurrentChannelUpdate = { currentChannel = it },
+            onClearChannel = { showClearChannelAlert = true }
+        )
     )
 }

@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AppDrawer(
     drawerState: DrawerState,
-    delegate: AppDrawerDelegate? = null,
+    delegate: AppDrawerDelegate = AppDrawerDelegate.previewDelegate,
     content: @Composable () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
@@ -72,14 +72,14 @@ fun AppDrawer(
                 DrawerTopHeader()
                 Divider(color = Color.LightGray)
                 ChannelsList(
-                    channels = delegate?.channels ?: emptyList(),
-                    selectedChannel = delegate?.selectedChannel ?: "",
-                    onChannelSelected = { delegate?.onChannelSelected(it) }
+                    channels = delegate.channels,
+                    selectedChannel = delegate.selectedChannel,
+                    onChannelSelected = { delegate.onChannelSelected(it) }
                 )
                 Divider(color = Color.LightGray)
                 ToolsList(
-                    onGenerateResponse = { delegate?.onGenerateResponse(it) },
-                    onClearChannel = { delegate?.onClearChannel() }
+                    onGenerateResponse = { delegate.onGenerateResponse(it) },
+                    onClearChannel = { delegate.onClearChannel() }
                 )
             }
         },
