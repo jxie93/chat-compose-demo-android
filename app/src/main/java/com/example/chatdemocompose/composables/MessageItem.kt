@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -43,7 +44,7 @@ private fun MessageItemTimestamp(
     content: Message,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -81,7 +82,9 @@ private fun MessageItemContent(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = if (isReceived) Arrangement.Start else Arrangement.End
     ) {
-        if (!isReceived) Spacer(modifier = Modifier.fillMaxWidth(0.2f).weight(0.2f))
+        if (!isReceived) Spacer(modifier = Modifier
+            .fillMaxWidth(0.2f)
+            .weight(0.2f))
         Surface(
             color = backgroundColor,
             shape = backgroundShape,
@@ -95,7 +98,9 @@ private fun MessageItemContent(
                 color = Color.White
             )
         }
-        if (isReceived) Spacer(modifier = Modifier.fillMaxWidth(0.2f).weight(0.2f))
+        if (isReceived) Spacer(modifier = Modifier
+            .fillMaxWidth(0.2f)
+            .weight(0.2f))
     }
 }
 
