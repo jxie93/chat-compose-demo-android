@@ -22,6 +22,7 @@ import androidx.core.view.WindowCompat
 import com.example.chatdemocompose.composables.AppAlert
 import com.example.chatdemocompose.composables.AppDrawer
 import com.example.chatdemocompose.composables.ChatScreen
+import com.example.chatdemocompose.delegates.ChatScreenDelegate
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_BODHI
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
@@ -91,17 +92,19 @@ fun App(
                 color = MaterialTheme.colors.background
             ) {
                 ChatScreen(
-                    channel = { currentChannel },
                     uiState = uiState,
-                    onSendMessage = { msg ->
-                        viewModel.sendMessage(
-                            messageText = msg,
-                            channel = currentChannel
-                        )
-                    },
-                    onNavIconPressed = {
-                        scope.launch {
-                            drawerState.open()
+                    delegate = object: ChatScreenDelegate {
+                        override fun getChannel() = currentChannel
+                        override fun onNavIconPressed() {
+                            scope.launch {
+                                drawerState.open()
+                            }
+                        }
+                        override fun onSendMessage(messageText: String) {
+                            viewModel.sendMessage(
+                                messageText = messageText,
+                                channel = currentChannel
+                            )
                         }
                     }
                 )
