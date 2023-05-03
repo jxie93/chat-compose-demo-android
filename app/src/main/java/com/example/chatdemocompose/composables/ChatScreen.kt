@@ -27,6 +27,7 @@ import com.example.chatdemocompose.domain.Message
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
 import com.example.chatdemocompose.domain.Message.Companion.MIN_TIME_DIFFERENCE_TIMESTAMP_MILLIS
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
+import com.example.chatdemocompose.usecases.MessageLastInBlockUseCase
 import com.example.chatdemocompose.usecases.MessageShowTimestampUseCase
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -111,11 +112,21 @@ fun MessageList(
             .then(modifier)
     ) {
         for (index in messages.indices) {
+            val prevMessage2 = messages.getOrNull(index - 2)
             val prevMessage = messages.getOrNull(index - 1)
             val nextMessage = messages.getOrNull(index + 1)
             val currentMessage = messages[index]
 
-            val shouldShowTimestamp = MessageShowTimestampUseCase().invoke(
+            val showTimestampUseCase = MessageShowTimestampUseCase()
+
+            val shouldShowTimestamp = showTimestampUseCase.invoke(
+                prevMessage = prevMessage,
+                currentMessage = currentMessage,
+                nextMessage = nextMessage
+            )
+
+            val isLastInBlock = MessageLastInBlockUseCase(showTimestampUseCase).invoke(
+                prevMessage2 = prevMessage2,
                 prevMessage = prevMessage,
                 currentMessage = currentMessage,
                 nextMessage = nextMessage
@@ -126,7 +137,8 @@ fun MessageList(
             ) {
                 MessageItem(
                     content = currentMessage,
-                    showTimestamp = shouldShowTimestamp
+                    showTimestamp = shouldShowTimestamp,
+                    isLastInBlock = isLastInBlock
                 )
             }
         }

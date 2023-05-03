@@ -23,7 +23,8 @@ import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
 fun MessageItem(
     modifier: Modifier = Modifier,
     content: Message,
-    showTimestamp: Boolean
+    showTimestamp: Boolean,
+    isLastInBlock: Boolean
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         if (showTimestamp) {
@@ -31,7 +32,8 @@ fun MessageItem(
         }
         MessageItemContent(
             content = content,
-            showTimestamp = showTimestamp
+            showTimestamp = showTimestamp,
+            isLastInBlock = isLastInBlock
         )
     }
 }
@@ -54,7 +56,8 @@ private fun MessageItemTimestamp(
 @Composable
 private fun MessageItemContent(
     content: Message,
-    showTimestamp: Boolean
+    showTimestamp: Boolean,
+    isLastInBlock: Boolean
 ) {
     val isReceived = content.isReceived
     val backgroundColor = if (isReceived) {
@@ -62,7 +65,9 @@ private fun MessageItemContent(
     } else {
         androidx.compose.material.MaterialTheme.colors.secondaryVariant
     }
-    val backgroundShape = if (isReceived) {
+    val backgroundShape = if (!isLastInBlock) {
+        RoundedCornerShape(16.dp, 16.dp, 16.dp, 16.dp)
+    } else if (isReceived) {
         RoundedCornerShape(16.dp, 16.dp, 16.dp, 2.dp)
     } else {
         RoundedCornerShape(16.dp, 16.dp, 2.dp, 16.dp)
@@ -106,7 +111,8 @@ fun MessageItemPreview() {
                 sender = SENDER_ME,
                 channel = "channel"
             ),
-            showTimestamp = true
+            showTimestamp = true,
+            isLastInBlock = true
         )
     }
 }
@@ -123,7 +129,8 @@ fun MessageItemPreviewReceived() {
                 sender = "sender",
                 channel = "channel"
             ),
-            showTimestamp = true
+            showTimestamp = true,
+            isLastInBlock = true
         )
     }
 }
