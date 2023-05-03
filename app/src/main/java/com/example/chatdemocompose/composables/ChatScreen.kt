@@ -22,10 +22,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.chatdemocompose.ChatScreenUiState
 import com.example.chatdemocompose.DummyFactory
+import com.example.chatdemocompose.delegates.ChatScreenDelegate
 import com.example.chatdemocompose.domain.Message
 import com.example.chatdemocompose.domain.Message.Companion.CHANNEL_ALICE
 import com.example.chatdemocompose.domain.Message.Companion.MIN_TIME_DIFFERENCE_TIMESTAMP_MILLIS
 import com.example.chatdemocompose.ui.theme.ChatDemoComposeTheme
+import com.example.chatdemocompose.usecases.MessageShowTimestampUseCase
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
@@ -33,9 +35,7 @@ import kotlin.math.abs
 fun ChatScreen(
     modifier: Modifier = Modifier,
     uiState: ChatScreenUiState,
-    channel: () -> String,
-    onNavIconPressed: () -> Unit = {},
-    onSendMessage: (String) -> Unit = {}
+    delegate: ChatScreenDelegate = ChatScreenDelegate.previewDelegate
 ) {
     val scrollState = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -43,8 +43,8 @@ fun ChatScreen(
     Scaffold(
         topBar = {
             ChatScreenTopBar(
-                channelName = channel(),
-                onNavIconPressed = onNavIconPressed
+                channelName = delegate.channel,
+                onNavIconPressed = { delegate.onNavIconPressed() }
             )
         },
     ) { paddingValues ->
@@ -64,7 +64,7 @@ fun ChatScreen(
                 modifier = Modifier
                     .navigationBarsPadding()
                     .imePadding(),
-                onSendMessage = onSendMessage,
+                onSendMessage = { delegate.onSendMessage(it) },
                 onResetScroll = {
                     scope.launch {
                         scrollState.scrollToItem(0)
@@ -106,19 +106,20 @@ fun MessageList(
     LazyColumn(
         reverseLayout = true,
         state = scrollState,
-        modifier = Modifier.fillMaxSize().then(modifier)
+        modifier = Modifier
+            .fillMaxSize()
+            .then(modifier)
     ) {
         for (index in messages.indices) {
             val prevMessage = messages.getOrNull(index - 1)
             val nextMessage = messages.getOrNull(index + 1)
             val currentMessage = messages[index]
 
-            val differentSender = nextMessage?.sender != currentMessage.sender
-            val largeTimeDifference = nextMessage?.let {
-                abs(it.date - currentMessage.date) > MIN_TIME_DIFFERENCE_TIMESTAMP_MILLIS
-            } ?: false
-
-            val shouldShowTimestamp = differentSender || largeTimeDifference
+            val shouldShowTimestamp = MessageShowTimestampUseCase().invoke(
+                prevMessage = prevMessage,
+                currentMessage = currentMessage,
+                nextMessage = nextMessage
+            )
 
             item(
                 key = currentMessage.id
@@ -135,12 +136,23 @@ fun MessageList(
 @Preview
 @Composable
 fun ChatScreenPreview() {
-    ChatDemoComposeTheme {
+    ChatDemoComposeTheme(darkTheme = false) {
         ChatScreen(
-            channel = { CHANNEL_ALICE },
             uiState = ChatScreenUiState(
                 messages = DummyFactory.generateMessages(10)
-            ),
+            )
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ChatScreenPreviewDark() {
+    ChatDemoComposeTheme(darkTheme = true) {
+        ChatScreen(
+            uiState = ChatScreenUiState(
+                messages = DummyFactory.generateMessages(10)
+            )
         )
     }
 }
